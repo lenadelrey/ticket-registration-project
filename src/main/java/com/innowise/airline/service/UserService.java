@@ -2,18 +2,19 @@ package com.innowise.airline.service;
 
 import com.innowise.airline.dto.request.UserRequestDto;
 import com.innowise.airline.dto.response.UserResponseDto;
+import com.innowise.airline.model.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserResponseDto getById(Long id);
+    User getById(Long id);
 
-    UserResponseDto getByEmail(String email);
+    User getByEmail(String email);
 
-    List<UserResponseDto> getAll();
+    List<User> getAll();
 
-    UserResponseDto updateById(UserRequestDto user, Long id);
+    User updateById(User user, Long id);
 
     boolean deleteById(Long id);
 

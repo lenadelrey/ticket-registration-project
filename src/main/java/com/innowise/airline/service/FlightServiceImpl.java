@@ -24,40 +24,35 @@ public class FlightServiceImpl implements FlightService {
 
     @Transactional
     @Override
-    public FlightResponseDto create(FlightRequestDto flightRequestDto) {
-        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
+    public Flight create(Flight flight) {
         Airline from = airlineRepository.getById(flight.getFromId());
         Airline to = airlineRepository.getById(flight.getToId());
         flight.setFrom(from);
         flight.setTo(to);
-        return FlightMapper.mapFlightToFlightResponseDto(flightRepository.save(flight));
+        return flightRepository.save(flight);
     }
 
     @Override
-    public FlightResponseDto getById(Long id) {
+    public Flight getById(Long id) {
         if (flightRepository.existsById(id)) {
-            return FlightMapper.mapFlightToFlightResponseDto(flightRepository.getById(id));
+            return flightRepository.getById(id);
         }
         return null;
     }
 
     @Override
-    public List<FlightResponseDto> getAll() {
-        return flightRepository.findAll()
-                .stream()
-                .map(FlightMapper::mapFlightToFlightResponseDto)
-                .collect(Collectors.toList());
+    public List<Flight> getAll() {
+        return flightRepository.findAll();
     }
 
     @Transactional
     @Override
-    public FlightResponseDto updateById(FlightRequestDto flightRequestDto, Long id) {
+    public Flight updateById(Flight flight, Long id) {
         if (!flightRepository.existsById(id)) {
             throw new IsNotExistException("no such flight", "update");
         }
-        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
         flight.setId(id);
-        return FlightMapper.mapFlightToFlightResponseDto(flightRepository.save(flight));
+        return flightRepository.save(flight);
     }
 
     @Transactional

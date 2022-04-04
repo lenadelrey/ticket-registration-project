@@ -27,8 +27,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Transactional
     @Override
-    public TicketResponseDto create(TicketRequestDto ticketRequestDto, String email) {
-        Ticket ticket = TicketMapper.mapTicketRequestDtoToTicket(ticketRequestDto);
+    public Ticket create(Ticket ticket, String email) {
         Flight flight = flightRepository.getById(ticket.getFlightId());
 
         if (flight.getCountOfTickets() == 0) {
@@ -41,35 +40,30 @@ public class TicketServiceImpl implements TicketService {
         User user = userRepository.findByEmail(email);
         ticket.setUserId(user.getId());
         ticket.setUser(user);
-        return TicketMapper.mapTicketToTicketResponseDto(ticketRepository.save(ticket));
+        return ticketRepository.save(ticket);
     }
 
     @Override
-    public TicketResponseDto getById(Long id) {
+    public Ticket getById(Long id) {
         if (!ticketRepository.existsById(id)) {
             throw new IsNotExistException("no such ticket", "getById");
         }
-        return TicketMapper.mapTicketToTicketResponseDto(ticketRepository.getById(id));
+        return ticketRepository.getById(id);
     }
 
     @Override
-    public List<TicketResponseDto> getAll() {
-        return ticketRepository.findAll()
-                .stream()
-                .map(TicketMapper::mapTicketToTicketResponseDto)
-                .collect(Collectors.toList());
+    public List<Ticket> getAll() {
+        return ticketRepository.findAll();
     }
 
     @Transactional
     @Override
-    public TicketResponseDto updateById(TicketRequestDto ticketRequestDto, Long id) {
+    public Ticket updateById(Ticket ticket, Long id) {
         if (!ticketRepository.existsById(id)) {
             throw new IsNotExistException("no such ticket", "update");
         }
-        Ticket ticket = TicketMapper.mapTicketRequestDtoToTicket(ticketRequestDto);
-
         ticket.setId(id);
-        return TicketMapper.mapTicketToTicketResponseDto(ticketRepository.save(ticket));
+        return ticketRepository.save(ticket);
     }
 
     @Transactional

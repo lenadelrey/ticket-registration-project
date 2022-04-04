@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface FlightService {
 
-    FlightResponseDto create(FlightRequestDto flightRequestDto);
+    Flight create(Flight flight);
 
-    FlightResponseDto getById(Long id);
+    Flight getById(Long id);
 
-    List<FlightResponseDto> getAll();
+    List<Flight> getAll();
 
-    FlightResponseDto updateById(FlightRequestDto flightRequestDto, Long id);
+    Flight updateById(Flight flight, Long id);
 
     boolean deleteById(Long id);
 

@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface TicketService {
 
-    TicketResponseDto create(TicketRequestDto ticketRequestDto, String email);
+    Ticket create(Ticket ticket, String email);
 
-    TicketResponseDto getById(Long id);
+    Ticket getById(Long id);
 
-    List<TicketResponseDto> getAll();
+    List<Ticket> getAll();
 
-    TicketResponseDto updateById(TicketRequestDto ticketRequestDto, Long id);
+    Ticket updateById(Ticket ticket, Long id);
 
     boolean deleteById(Long id);
 
