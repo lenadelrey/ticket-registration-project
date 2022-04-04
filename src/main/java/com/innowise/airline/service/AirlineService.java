@@ -1,18 +1,20 @@
 package com.innowise.airline.service;
 
+import com.innowise.airline.dto.request.AirlineRequestDto;
+import com.innowise.airline.dto.response.AirlineResponseDto;
 import com.innowise.airline.model.Airline;
 
 import java.util.List;
 
 public interface AirlineService {
 
-    Airline create(Airline airline);
+    AirlineResponseDto create(AirlineRequestDto airlineRequestDto);
 
-    Airline getById(Long id);
+    AirlineResponseDto getById(Long id);
 
-    List<Airline> getAll();
+    List<AirlineResponseDto> getAll();
 
-    Airline updateById(Airline airline, Long id);
+    AirlineResponseDto updateById(AirlineRequestDto airlineRequestDto, Long id);
 
     boolean deleteById(Long id);
 

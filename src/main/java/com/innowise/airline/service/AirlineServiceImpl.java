@@ -1,5 +1,9 @@
 package com.innowise.airline.service;
 
+import com.innowise.airline.dto.request.AirlineRequestDto;
+import com.innowise.airline.dto.response.AirlineResponseDto;
+import com.innowise.airline.exception.IsNotExistException;
+import com.innowise.airline.mapper.AirlineMapper;
 import com.innowise.airline.model.Airline;
 import com.innowise.airline.repository.AirlineRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,31 +21,36 @@ public class AirlineServiceImpl implements AirlineService {
 
     @Transactional
     @Override
-    public Airline create(Airline airline) {
-        return airlineRepository.save(airline);
+    public AirlineResponseDto create(AirlineRequestDto airlineRequestDto) {
+        Airline airline = AirlineMapper.mapAirlineRequestDtoToAirline(airlineRequestDto);
+        return AirlineMapper.mapAirlineToAirlineResponseDto(airlineRepository.save(airline));
     }
 
     @Override
-    public Airline getById(Long id) {
-        if (airlineRepository.existsById(id)) {
-            return airlineRepository.getById(id);
+    public AirlineResponseDto getById(Long id) {
+        if (!airlineRepository.existsById(id)) {
+            throw new IsNotExistException("no such airline", "getById");
         }
-        return null;
+        return AirlineMapper.mapAirlineToAirlineResponseDto(airlineRepository.getById(id));
     }
 
     @Override
-    public List<Airline> getAll() {
-        return airlineRepository.findAll();
+    public List<AirlineResponseDto> getAll() {
+        return airlineRepository.findAll()
+                .stream()
+                .map(AirlineMapper::mapAirlineToAirlineResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public Airline updateById(Airline airline, Long id) {
-        if (airlineRepository.existsById(id)) {
-            airline.setId(id);
-            return airlineRepository.save(airline);
+    public AirlineResponseDto updateById(AirlineRequestDto airlineRequestDto, Long id) {
+        if (!airlineRepository.existsById(id)) {
+            throw new IsNotExistException("no such airline", "update");
         }
-        return null;
+        Airline airline = AirlineMapper.mapAirlineRequestDtoToAirline(airlineRequestDto);
+        airline.setId(id);
+        return AirlineMapper.mapAirlineToAirlineResponseDto(airlineRepository.save(airline));
     }
 
     @Transactional

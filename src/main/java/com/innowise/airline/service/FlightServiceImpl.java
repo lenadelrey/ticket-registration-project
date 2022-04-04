@@ -1,5 +1,9 @@
 package com.innowise.airline.service;
 
+import com.innowise.airline.dto.request.FlightRequestDto;
+import com.innowise.airline.dto.response.FlightResponseDto;
+import com.innowise.airline.exception.IsNotExistException;
+import com.innowise.airline.mapper.FlightMapper;
 import com.innowise.airline.model.Airline;
 import com.innowise.airline.model.Flight;
 import com.innowise.airline.repository.AirlineRepository;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,35 +24,40 @@ public class FlightServiceImpl implements FlightService {
 
     @Transactional
     @Override
-    public Flight create(Flight flight) {
+    public FlightResponseDto create(FlightRequestDto flightRequestDto) {
+        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
         Airline from = airlineRepository.getById(flight.getFromId());
         Airline to = airlineRepository.getById(flight.getToId());
         flight.setFrom(from);
         flight.setTo(to);
-        return flightRepository.save(flight);
+        return FlightMapper.mapFlightToFlightResponseDto(flightRepository.save(flight));
     }
 
     @Override
-    public Flight getById(Long id) {
+    public FlightResponseDto getById(Long id) {
         if (flightRepository.existsById(id)) {
-            return flightRepository.getById(id);
+            return FlightMapper.mapFlightToFlightResponseDto(flightRepository.getById(id));
         }
         return null;
     }
 
     @Override
-    public List<Flight> getAll() {
-        return flightRepository.findAll();
+    public List<FlightResponseDto> getAll() {
+        return flightRepository.findAll()
+                .stream()
+                .map(FlightMapper::mapFlightToFlightResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public Flight updateById(Flight flight, Long id) {
-        if (flightRepository.existsById(id)) {
-            flight.setId(id);
-            return flightRepository.save(flight);
+    public FlightResponseDto updateById(FlightRequestDto flightRequestDto, Long id) {
+        if (!flightRepository.existsById(id)) {
+            throw new IsNotExistException("no such flight", "update");
         }
-        return null;
+        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
+        flight.setId(id);
+        return FlightMapper.mapFlightToFlightResponseDto(flightRepository.save(flight));
     }
 
     @Transactional
