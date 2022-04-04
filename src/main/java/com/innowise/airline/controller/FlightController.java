@@ -2,6 +2,8 @@ package com.innowise.airline.controller;
 
 import com.innowise.airline.dto.request.FlightRequestDto;
 import com.innowise.airline.dto.response.FlightResponseDto;
+import com.innowise.airline.mapper.FlightMapper;
+import com.innowise.airline.model.Flight;
 import com.innowise.airline.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,22 +24,27 @@ public class FlightController {
 
     @PostMapping
     public ResponseEntity<FlightResponseDto> create(@RequestBody @Valid FlightRequestDto flightRequestDto) {
-        return new ResponseEntity<>(flightService.create(flightRequestDto), HttpStatus.OK);
+        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
+        return new ResponseEntity<>(FlightMapper.mapFlightToFlightResponseDto(flightService.create(flight)), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<FlightResponseDto>> getAll() {
-        return new ResponseEntity<>(flightService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>(flightService.getAll()
+                .stream()
+                .map(FlightMapper::mapFlightToFlightResponseDto)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FlightResponseDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(flightService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(FlightMapper.mapFlightToFlightResponseDto(flightService.getById(id)), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<FlightResponseDto> update(@Valid @RequestBody FlightRequestDto flightRequestDto, @PathVariable Long id) {
-        return new ResponseEntity<>(flightService.updateById(flightRequestDto, id), HttpStatus.OK);
+        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
+        return new ResponseEntity<>(FlightMapper.mapFlightToFlightResponseDto(flightService.updateById(flight, id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

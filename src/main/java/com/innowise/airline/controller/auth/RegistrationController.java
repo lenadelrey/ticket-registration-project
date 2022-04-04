@@ -2,6 +2,8 @@ package com.innowise.airline.controller.auth;
 
 import com.innowise.airline.dto.request.UserRequestDto;
 import com.innowise.airline.dto.response.UserResponseDto;
+import com.innowise.airline.mapper.UserMapper;
+import com.innowise.airline.model.User;
 import com.innowise.airline.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,8 @@ public class RegistrationController {
 
     @PostMapping
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto) {
-        return new ResponseEntity<>(registrationService.create(userRequestDto), HttpStatus.OK);
+        User user = UserMapper.mapUserRequestDtoToUser(userRequestDto);
+        return new ResponseEntity<>(UserMapper.mapUserToUserResponseDto(registrationService.create(user)), HttpStatus.OK);
     }
 
 }
