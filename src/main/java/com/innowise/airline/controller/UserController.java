@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public boolean delete(@PathVariable Long id) {
-        return userService.deleteById(id);
+    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.deleteById(id), HttpStatus.OK);
     }
 
 }
