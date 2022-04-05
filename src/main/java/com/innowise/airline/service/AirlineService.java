@@ -14,6 +14,7 @@ public interface AirlineService {
 
     Airline updateById(Airline airline, Long id);
 
+    //TODO: почему boolean?
     boolean deleteById(Long id);
 
 }

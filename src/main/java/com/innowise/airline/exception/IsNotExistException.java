@@ -1,6 +1,6 @@
 package com.innowise.airline.exception;
 
-
+//TODO: Поскольку Exception работает только в одном направлении(возбуждается, если не найден объект), предлагаю инкапсулировать сообщение в конструктор.
 public class IsNotExistException extends RuntimeException{
 
     private final String value;

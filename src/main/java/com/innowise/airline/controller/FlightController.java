@@ -15,6 +15,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//TODO: Замечания, указанные в других контроллерах учесть при рефакторинге данного.
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/flight")

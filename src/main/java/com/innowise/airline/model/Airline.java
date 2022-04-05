@@ -1,5 +1,6 @@
 package com.innowise.airline.model;
 
+import com.sun.xml.bind.v2.TODO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,11 @@ public class Airline {
 
     private String name;
 
+    //TODO: Необходимость двусторонней связи?
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "from")
     private Set<Flight> flightsFrom;
 
+    //TODO: Необходимость двусторонней связи?
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "to")
     private Set<Flight> flightsTo;
 }

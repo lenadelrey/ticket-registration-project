@@ -4,6 +4,7 @@ import com.innowise.airline.dto.request.UserRequestDto;
 import com.innowise.airline.dto.response.UserResponseDto;
 import com.innowise.airline.model.User;
 
+//TODO: Зачем создавать Builder, а потом его не использовать?)
 public class UserMapper {
 
     public static User mapUserRequestDtoToUser(UserRequestDto userRequestDto) {

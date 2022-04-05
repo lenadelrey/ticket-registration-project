@@ -10,6 +10,8 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
+//TODO: Достаточно просто UserRequest, сделать для каждой CRUD операции собственный request.
+
 @Getter
 @Setter
 @Builder

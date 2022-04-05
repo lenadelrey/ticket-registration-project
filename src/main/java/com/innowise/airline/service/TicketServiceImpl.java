@@ -37,21 +37,25 @@ public class TicketServiceImpl implements TicketService {
         flight.setCountOfTickets(flight.getCountOfTickets() - 1);
         Flight saved = flightRepository.save(flight);
         ticket.setFlight(saved);
+        //TODO: работать с id сущности, поиск по email использовать только для авторизации, аутентификации, валидации при регистрации
         User user = userRepository.findByEmail(email);
         ticket.setUserId(user.getId());
         ticket.setUser(user);
+        //TODO: разделять логические блоки кода, в данном случае содержимое create-метода плохо читаемо и трудно для восприятия
         return ticketRepository.save(ticket);
     }
 
     @Override
     public Ticket getById(Long id) {
         if (!ticketRepository.existsById(id)) {
+            //TODO: литералы вынести в константы, либо инкапулировать сообщение в конструктор
             throw new IsNotExistException("no such ticket", "getById");
         }
         return ticketRepository.getById(id);
     }
 
     @Override
+    //TODO: Использовать пагинацию
     public List<Ticket> getAll() {
         return ticketRepository.findAll();
     }
@@ -62,6 +66,7 @@ public class TicketServiceImpl implements TicketService {
         if (!ticketRepository.existsById(id)) {
             throw new IsNotExistException("no such ticket", "update");
         }
+        //TODO: пустая строка между логическими блоками
         ticket.setId(id);
         return ticketRepository.save(ticket);
     }
@@ -69,9 +74,12 @@ public class TicketServiceImpl implements TicketService {
     @Transactional
     @Override
     public boolean deleteById(Long id) {
+        //TODO: использовать методы Optional
         if (!ticketRepository.existsById(id)) {
             throw new IsNotExistException("no such ticket", "delete");
         }
+        //TODO: разве return ticketRepository.deleteById() не эквивалетно написанным ниже двум строкам? Заменять одной в таких ситуациях.
+        //TODO: опять же, мотивация использования boolean?
         ticketRepository.deleteById(id);
         return true;
     }

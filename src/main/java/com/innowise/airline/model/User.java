@@ -14,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
 
+    //TODO: Достаточно просто id, user_id избыточно. Создать новую миграцию и в ней сделать ренейм. Тоже самое касается и других сущностей.
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,7 @@ public class User {
     @Column(name = "deleted")
     private boolean deleted = false;
 
+    //TODO: Необходимость двусторонней связи?
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Ticket> tickets;
 }

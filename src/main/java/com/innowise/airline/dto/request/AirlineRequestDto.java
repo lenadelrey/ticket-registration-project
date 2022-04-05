@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
+//TODO: Достаточно просто AirlineRequest, сделать для каждой CRUD операции собственный request.
 @Getter
 @Setter
 @Builder

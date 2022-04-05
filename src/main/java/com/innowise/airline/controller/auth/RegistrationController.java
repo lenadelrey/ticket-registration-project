@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+//TODO: @RestController при возвращении json
+//TODO: Регистрация является созданием пользователя, декомпозиция неуметсна. Вынести в UserController/.
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/reg")

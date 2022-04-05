@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+//TODO: Для больширх сущностей рекомендую использовать Builder
+
 @Entity
 @Getter
 @Setter
@@ -31,6 +33,7 @@ public class Flight {
     @JoinColumn(name = "fk_airline_to_id", nullable = false)
     private Airline to;
 
+    //TODO: Необходимость двусторонней связи?
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flight")
     private Set<Ticket> tickets;
 

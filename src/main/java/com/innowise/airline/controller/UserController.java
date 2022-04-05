@@ -27,11 +27,15 @@ public class UserController {
         return new ResponseEntity<>(UserMapper.mapUserToUserResponseDto(userService.getById(id)), HttpStatus.OK);
     }
 
+    //TODO: Пример ситуации, в которой фронту понадобится получить пользователя по email, если есть id?
+    //TODO: На уровне сервисов такой метод имеет место быть, на уровне контроллера не вижу необходимости
     @GetMapping("/getByEmail/{email}")
     public ResponseEntity<UserResponseDto> getByEmail(@PathVariable String email) {
         return new ResponseEntity<>(UserMapper.mapUserToUserResponseDto(userService.getByEmail(email)), HttpStatus.OK);
     }
 
+
+    //TODO: Сделать метод в маппере для списка. Тем самым декомпозировать. Нарушение принципа Single Responsibility.
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAll() {
         return new ResponseEntity<>(userService.getAll()

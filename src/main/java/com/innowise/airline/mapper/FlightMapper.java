@@ -3,6 +3,7 @@ package com.innowise.airline.mapper;
 import com.innowise.airline.dto.request.FlightRequestDto;
 import com.innowise.airline.dto.response.FlightResponseDto;
 import com.innowise.airline.model.Flight;
+//TODO: Зачем создавать Builder, а потом его не использовать?)
 
 public class FlightMapper {
 

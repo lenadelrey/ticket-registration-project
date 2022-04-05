@@ -4,6 +4,7 @@ import com.innowise.airline.dto.request.AirlineRequestDto;
 import com.innowise.airline.dto.response.AirlineResponseDto;
 import com.innowise.airline.model.Airline;
 
+//TODO: use MapStruct
 public class AirlineMapper {
 
     public static Airline mapAirlineRequestDtoToAirline(AirlineRequestDto airlineRequestDto) {
