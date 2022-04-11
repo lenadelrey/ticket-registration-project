@@ -11,11 +11,14 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 //TODO: Достаточно просто UserRequest, сделать для каждой CRUD операции собственный request.
+// не вижу смысла делать для каждой CRUD операции собственный request, поскольку единственные два метода, на которые мне приходит request
+// это create и update, и оба эти метода, по моему мнению, могут принимать одинаковые поля, соответственно делать две одинаковые сущности
+// с разными именами не имеет смысла, это касается всех моих entity
 
 @Getter
 @Setter
 @Builder
-public class UserRequestDto {
+public class UserRequest {
 
     @NotBlank(message = "Необходимо указать имя")
     private String name;

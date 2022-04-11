@@ -8,12 +8,11 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
-//TODO: Достаточно просто FlightRequest, сделать для каждой CRUD операции собственный request.
 
 @Getter
 @Setter
 @Builder
-public class FlightRequestDto {
+public class FlightRequest {
 
     @NotBlank
     @Positive

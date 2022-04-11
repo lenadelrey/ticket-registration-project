@@ -7,14 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class FlightResponseDto {
+public class FlightDto {
 
-    private AirlineResponseDto from;
-
-    private AirlineResponseDto to;
-
+    private AirlineDto from;
+    private AirlineDto to;
     private LocalDateTime flightDate;
-
     private int countOfTickets;
 
 }

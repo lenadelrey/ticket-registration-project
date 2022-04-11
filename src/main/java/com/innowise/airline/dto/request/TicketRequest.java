@@ -7,12 +7,10 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-//TODO: Достаточно просто TicketRequest, сделать для каждой CRUD операции собственный request.
-
 @Getter
 @Setter
 @Builder
-public class TicketRequestDto {
+public class TicketRequest {
     @NotBlank
     @Positive
     private Long flightId;
