@@ -11,13 +11,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ticket")
+@RequestMapping("/user/ticket")
 public class TicketController {
 
     private final TicketService ticketService;
@@ -29,6 +30,7 @@ public class TicketController {
         return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.create(ticket, id)), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<Page<TicketDto>> getAll(@PageableDefault Pageable pageable) {
         return new ResponseEntity<>(ticketMapper.mapPageTicketToPageTicketDto(ticketService.getAll(pageable)), HttpStatus.OK);

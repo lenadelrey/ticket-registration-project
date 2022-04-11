@@ -11,18 +11,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/flight")
+@RequestMapping("/user/flight")
 public class FlightController {
 
     private final FlightService flightService;
     private final FlightMapper flightMapper;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<FlightDto> create(@RequestBody @Valid FlightRequest flightRequest) {
         Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
@@ -39,12 +41,14 @@ public class FlightController {
         return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.getById(id)), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<FlightDto> update(@Valid @RequestBody FlightRequest flightRequest, @PathVariable Long id) {
         Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
         return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.updateById(flight, id)), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         flightService.deleteById(id);
