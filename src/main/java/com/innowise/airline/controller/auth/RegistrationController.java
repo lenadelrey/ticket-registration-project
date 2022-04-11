@@ -1,34 +1,34 @@
 package com.innowise.airline.controller.auth;
 
-import com.innowise.airline.dto.request.UserRequestDto;
-import com.innowise.airline.dto.response.UserResponseDto;
+import com.innowise.airline.dto.request.UserRequest;
+import com.innowise.airline.dto.response.UserDto;
 import com.innowise.airline.mapper.UserMapper;
 import com.innowise.airline.model.User;
 import com.innowise.airline.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-//TODO: @RestController при возвращении json
 //TODO: Регистрация является созданием пользователя, декомпозиция неуметсна. Вынести в UserController/.
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/reg")
 public class RegistrationController {
 
     private final RegistrationService registrationService;
+    private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto) {
-        User user = UserMapper.mapUserRequestDtoToUser(userRequestDto);
-        return new ResponseEntity<>(UserMapper.mapUserToUserResponseDto(registrationService.create(user)), HttpStatus.OK);
+    public ResponseEntity<UserDto> create(@RequestBody @Valid UserRequest userRequest) {
+        User user = userMapper.mapUserRequestToUser(userRequest);
+        return new ResponseEntity<>(userMapper.mapUserToUserDto(registrationService.create(user)), HttpStatus.OK);
     }
 
 }

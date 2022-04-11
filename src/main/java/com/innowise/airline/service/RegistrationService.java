@@ -8,8 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
@@ -18,10 +16,10 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Optional<User> create(User user) {
-        user.setRole(Role.USER);
+    public User create(User user) {
+        user.setRole(Role.ROLE_USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return Optional.of(userRepository.save(user));
+        return userRepository.save(user);
     }
 
 }

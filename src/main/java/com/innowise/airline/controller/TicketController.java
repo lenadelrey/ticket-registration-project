@@ -26,7 +26,7 @@ public class TicketController {
     @PostMapping("/{id}")
     public ResponseEntity<TicketDto> createTicket(@RequestBody @Valid TicketRequest ticketRequest, @PathVariable Long id) {
         Ticket ticket = ticketMapper.mapTicketRequestToTicket(ticketRequest);
-        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.create(ticket, id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.create(ticket, id)), HttpStatus.OK);
     }
 
     @GetMapping
@@ -36,13 +36,13 @@ public class TicketController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TicketDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.getById(id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.getById(id)), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<TicketDto> update(@RequestBody @Valid TicketRequest ticketRequest, @PathVariable Long id) {
         Ticket ticket = ticketMapper.mapTicketRequestToTicket(ticketRequest);
-        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.updateById(ticket, id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.updateById(ticket, id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

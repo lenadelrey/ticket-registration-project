@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -24,11 +22,11 @@ public class TicketService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Optional<Ticket> create(Ticket ticket, Long id) {
+    public Ticket create(Ticket ticket, Long id) {
         Flight flight = flightRepository.getById(ticket.getFlightId());
 
         if (flight.getCountOfTickets() == 0) {
-            return Optional.empty();
+            return null;
         }
 
         flight.setCountOfTickets(flight.getCountOfTickets() - 1);
@@ -39,11 +37,11 @@ public class TicketService {
         ticket.setUserId(user.getId());
         ticket.setUser(user);
 
-        return Optional.of(ticketRepository.save(ticket));
+        return ticketRepository.save(ticket);
     }
 
-    public Optional<Ticket> getById(Long id) {
-        return Optional.ofNullable(ticketRepository.findById(id).orElseThrow(IsNotExistException::new));
+    public Ticket getById(Long id) {
+        return ticketRepository.findById(id).orElseThrow(IsNotExistException::new);
 
     }
 
@@ -52,13 +50,11 @@ public class TicketService {
     }
 
     @Transactional
-    public Optional<Ticket> updateById(Ticket ticket, Long id) {
-        if (!ticketRepository.existsById(id)) {
-            throw new IsNotExistException();
-        }
+    public Ticket updateById(Ticket ticket, Long id) {
+        ticketRepository.findById(id).orElseThrow(IsNotExistException::new);
 
         ticket.setId(id);
-        return Optional.of(ticketRepository.save(ticket));
+        return ticketRepository.save(ticket);
     }
 
     @Transactional

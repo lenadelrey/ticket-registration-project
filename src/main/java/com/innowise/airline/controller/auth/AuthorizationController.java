@@ -1,8 +1,7 @@
 package com.innowise.airline.controller.auth;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
-//TODO: @RestController поменять во всех контроллерах
-@Controller
+@RestController
 public class AuthorizationController {
 }

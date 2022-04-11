@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping("/getById/{id}")
     public ResponseEntity<UserDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.getById(id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.getById(id)), HttpStatus.OK);
     }
 
     @GetMapping
@@ -36,7 +36,7 @@ public class UserController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<UserDto> update(@Valid @RequestBody UserRequest userRequest, @PathVariable Long id) {
         User user = userMapper.mapUserRequestToUser(userRequest);
-        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.updateById(user, id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.updateById(user, id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

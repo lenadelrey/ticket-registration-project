@@ -11,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class FlightService {
@@ -21,16 +19,16 @@ public class FlightService {
     private final AirlineRepository airlineRepository;
 
     @Transactional
-    public Optional<Flight> create(Flight flight) {
+    public Flight create(Flight flight) {
         Airline from = airlineRepository.getById(flight.getFromId());
         Airline to = airlineRepository.getById(flight.getToId());
         flight.setFrom(from);
         flight.setTo(to);
-        return Optional.of(flightRepository.save(flight));
+        return flightRepository.save(flight);
     }
 
-    public Optional<Flight> getById(Long id) {
-        return Optional.ofNullable(flightRepository.findById(id).orElseThrow(IsNotExistException::new));
+    public Flight getById(Long id) {
+        return flightRepository.findById(id).orElseThrow(IsNotExistException::new);
     }
 
     public Page<Flight> getAll(Pageable pageable) {
@@ -38,13 +36,11 @@ public class FlightService {
     }
 
     @Transactional
-    public Optional<Flight> updateById(Flight flight, Long id) {
-        if (!flightRepository.existsById(id)) {
-            throw new IsNotExistException("update");
-        }
+    public Flight updateById(Flight flight, Long id) {
+        flightRepository.findById(id).orElseThrow(IsNotExistException::new);
 
         flight.setId(id);
-        return Optional.of(flightRepository.save(flight));
+        return flightRepository.save(flight);
     }
 
     @Transactional

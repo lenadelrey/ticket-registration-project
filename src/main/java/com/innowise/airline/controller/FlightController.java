@@ -26,7 +26,7 @@ public class FlightController {
     @PostMapping
     public ResponseEntity<FlightDto> create(@RequestBody @Valid FlightRequest flightRequest) {
         Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
-        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.create(flight).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.create(flight)), HttpStatus.OK);
     }
 
     @GetMapping
@@ -36,13 +36,13 @@ public class FlightController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FlightDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.getById(id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.getById(id)), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<FlightDto> update(@Valid @RequestBody FlightRequest flightRequest, @PathVariable Long id) {
         Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
-        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.updateById(flight, id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.updateById(flight, id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

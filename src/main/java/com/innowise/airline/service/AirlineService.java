@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class AirlineService {
@@ -18,12 +16,12 @@ public class AirlineService {
     private final AirlineRepository airlineRepository;
 
     @Transactional
-    public Optional<Airline> create(Airline airline) {
-        return Optional.of(airlineRepository.save(airline));
+    public Airline create(Airline airline) {
+        return airlineRepository.save(airline);
     }
 
-    public Optional<Airline> getById(Long id) {
-        return Optional.ofNullable(airlineRepository.findById(id).orElseThrow(IsNotExistException::new));
+    public Airline getById(Long id) {
+        return airlineRepository.findById(id).orElseThrow(IsNotExistException::new);
     }
 
     public Page<Airline> getAll(Pageable pageable) {
@@ -31,13 +29,11 @@ public class AirlineService {
     }
 
     @Transactional
-    public Optional<Airline> updateById(Airline airline, Long id) {
-        if (!airlineRepository.existsById(id)) {
-            throw new IsNotExistException();
-        }
+    public Airline updateById(Airline airline, Long id) {
+        airlineRepository.findById(id).orElseThrow(IsNotExistException::new);
 
         airline.setId(id);
-        return Optional.of(airlineRepository.save(airline));
+        return airlineRepository.save(airline);
     }
 
     @Transactional

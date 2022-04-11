@@ -27,7 +27,7 @@ public class AirlineController {
     @PostMapping
     public ResponseEntity<AirlineDto> create(@Valid @RequestBody AirlineRequest airlineRequest) {
         Airline airline = airlineMapper.mapAirlineRequestToAirline(airlineRequest);
-        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.create(airline).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.create(airline)), HttpStatus.OK);
     }
 
     @GetMapping
@@ -37,14 +37,14 @@ public class AirlineController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AirlineDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.getById(id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.getById(id)), HttpStatus.OK);
     }
 
 
     @PatchMapping("/{id}")
     public ResponseEntity<AirlineDto> update(@Valid @RequestBody AirlineRequest airlineRequest, @PathVariable Long id) {
         Airline airline = airlineMapper.mapAirlineRequestToAirline(airlineRequest);
-        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.updateById(airline, id).orElseThrow()), HttpStatus.OK);
+        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.updateById(airline, id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
