@@ -23,6 +23,12 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @PostMapping
+    public ResponseEntity<UserDto> registration(@RequestBody @Valid UserRequest userRequest) {
+        User user = userMapper.mapUserRequestToUser(userRequest);
+        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.create(user)), HttpStatus.CREATED);
+    }
+
     @GetMapping("/getById/{id}")
     public ResponseEntity<UserDto> getById(@PathVariable Long id) {
         return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.getById(id)), HttpStatus.OK);

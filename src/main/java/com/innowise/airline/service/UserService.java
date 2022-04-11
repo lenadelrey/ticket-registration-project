@@ -1,6 +1,7 @@
 package com.innowise.airline.service;
 
 import com.innowise.airline.exception.IsNotExistException;
+import com.innowise.airline.model.Role;
 import com.innowise.airline.model.User;
 import com.innowise.airline.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public User create(User user) {
+        user.setRole(Role.ROLE_USER);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
 
     public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new IsNotExistException("getById"));
