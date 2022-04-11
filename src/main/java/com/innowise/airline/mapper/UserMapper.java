@@ -1,28 +1,19 @@
 package com.innowise.airline.mapper;
 
-import com.innowise.airline.dto.request.UserRequestDto;
-import com.innowise.airline.dto.response.UserResponseDto;
+import com.innowise.airline.dto.request.UserRequest;
+import com.innowise.airline.dto.response.UserDto;
 import com.innowise.airline.model.User;
+import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
-//TODO: Зачем создавать Builder, а потом его не использовать?)
-public class UserMapper {
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    User mapUserRequestToUser(UserRequest userRequest);
 
-    public static User mapUserRequestDtoToUser(UserRequestDto userRequestDto) {
-        User user = new User();
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(userRequestDto.getPassword());
-        user.setName(userRequestDto.getName());
-        user.setDateOfBirth(userRequestDto.getDateOfBirth());
-        return user;
-    }
+    UserDto mapUserToUserDto(User user);
 
-    public static UserResponseDto mapUserToUserResponseDto(User user) {
-        return UserResponseDto.builder()
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .dateOfBirth(user.getDateOfBirth())
-                .build();
+    default Page<UserDto> mapPageUserToPageUserDto(Page<User> users) {
+        return users.map(this::mapUserToUserDto);
     }
 
 }

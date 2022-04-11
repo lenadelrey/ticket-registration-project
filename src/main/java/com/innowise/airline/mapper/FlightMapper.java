@@ -1,28 +1,19 @@
 package com.innowise.airline.mapper;
 
-import com.innowise.airline.dto.request.FlightRequestDto;
-import com.innowise.airline.dto.response.FlightResponseDto;
+import com.innowise.airline.dto.request.FlightRequest;
+import com.innowise.airline.dto.response.FlightDto;
 import com.innowise.airline.model.Flight;
-//TODO: Зачем создавать Builder, а потом его не использовать?)
+import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
-public class FlightMapper {
+@Mapper(componentModel = "spring")
+public interface FlightMapper {
 
-    public static Flight mapFlightRequestDtoToFlight(FlightRequestDto flightRequestDto) {
-        Flight flight = new Flight();
-        flight.setFromId(flightRequestDto.getFromId());
-        flight.setToId(flightRequestDto.getToId());
-        flight.setFlightDate(flightRequestDto.getFlightDate());
-        flight.setCountOfTickets(flightRequestDto.getCountOfTickets());
-        return flight;
+    Flight mapFlightRequestToFlight(FlightRequest flightRequest);
+
+    FlightDto mapFlightToFlightDto(Flight flight);
+
+    default Page<FlightDto> mapPageFlightToPageFlightDto(Page<Flight> flights) {
+        return flights.map(this::mapFlightToFlightDto);
     }
-
-    public static FlightResponseDto mapFlightToFlightResponseDto(Flight flight) {
-        return FlightResponseDto.builder()
-                .flightDate(flight.getFlightDate())
-                .countOfTickets(flight.getCountOfTickets())
-                .from(AirlineMapper.mapAirlineToAirlineResponseDto(flight.getFrom()))
-                .to(AirlineMapper.mapAirlineToAirlineResponseDto(flight.getTo()))
-                .build();
-    }
-
 }

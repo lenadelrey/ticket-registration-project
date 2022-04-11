@@ -1,22 +1,20 @@
 package com.innowise.airline.mapper;
 
-import com.innowise.airline.dto.request.AirlineRequestDto;
-import com.innowise.airline.dto.response.AirlineResponseDto;
+import com.innowise.airline.dto.request.AirlineRequest;
+import com.innowise.airline.dto.response.AirlineDto;
 import com.innowise.airline.model.Airline;
+import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
-//TODO: use MapStruct
-public class AirlineMapper {
+@Mapper(componentModel = "spring")
+public interface AirlineMapper {
 
-    public static Airline mapAirlineRequestDtoToAirline(AirlineRequestDto airlineRequestDto) {
-        Airline airline = new Airline();
-        airline.setName(airlineRequestDto.getName());
-        return airline;
-    }
+    Airline mapAirlineRequestToAirline(AirlineRequest airlineRequest);
 
-    public static AirlineResponseDto mapAirlineToAirlineResponseDto(Airline airline) {
-        return AirlineResponseDto.builder()
-                .name(airline.getName())
-                .build();
+    AirlineDto mapAirlineToAirlineDto(Airline airline);
+
+    default Page<AirlineDto> mapPageAirlineToPageAirlineDto(Page<Airline> airlines) {
+        return airlines.map(this::mapAirlineToAirlineDto);
     }
 
 }
