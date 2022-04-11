@@ -1,55 +1,53 @@
 package com.innowise.airline.controller;
 
-import com.innowise.airline.dto.request.TicketRequestDto;
-import com.innowise.airline.dto.response.TicketResponseDto;
+import com.innowise.airline.dto.request.TicketRequest;
+import com.innowise.airline.dto.response.TicketDto;
 import com.innowise.airline.mapper.TicketMapper;
 import com.innowise.airline.model.Ticket;
 import com.innowise.airline.service.TicketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
-//TODO: Замечания, указанные в других контроллерах учесть при рефакторинге данного.
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/ticket")
 public class TicketController {
 
     private final TicketService ticketService;
+    private final TicketMapper ticketMapper;
 
-    @PostMapping("/{email}")
-    public ResponseEntity<TicketResponseDto> create(@RequestBody @Valid TicketRequestDto ticketRequestDto, @PathVariable String email) {
-        Ticket ticket = TicketMapper.mapTicketRequestDtoToTicket(ticketRequestDto);
-        return new ResponseEntity<>(TicketMapper.mapTicketToTicketResponseDto(ticketService.create(ticket, email)), HttpStatus.OK);
+    @PostMapping("/{id}")
+    public ResponseEntity<TicketDto> createTicket(@RequestBody @Valid TicketRequest ticketRequest, @PathVariable Long id) {
+        Ticket ticket = ticketMapper.mapTicketRequestToTicket(ticketRequest);
+        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.create(ticket, id).orElseThrow()), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<TicketResponseDto>> getAll() {
-        return new ResponseEntity<>(ticketService.getAll()
-                .stream()
-                .map(TicketMapper::mapTicketToTicketResponseDto)
-                .collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<Page<TicketDto>> getAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(ticketMapper.mapPageTicketToPageTicketDto(ticketService.getAll(pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TicketResponseDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(TicketMapper.mapTicketToTicketResponseDto(ticketService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<TicketDto> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.getById(id).orElseThrow()), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<TicketResponseDto> update(@RequestBody @Valid TicketRequestDto ticketRequestDto, @PathVariable Long id) {
-        Ticket ticket = TicketMapper.mapTicketRequestDtoToTicket(ticketRequestDto);
-        return new ResponseEntity<>(TicketMapper.mapTicketToTicketResponseDto(ticketService.updateById(ticket, id)), HttpStatus.OK);
+    @PatchMapping("/{id}")
+    public ResponseEntity<TicketDto> update(@RequestBody @Valid TicketRequest ticketRequest, @PathVariable Long id) {
+        Ticket ticket = ticketMapper.mapTicketRequestToTicket(ticketRequest);
+        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.updateById(ticket, id).orElseThrow()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-        return new ResponseEntity<>(ticketService.deleteById(id), HttpStatus.OK);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ticketService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

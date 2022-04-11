@@ -1,57 +1,54 @@
 package com.innowise.airline.controller;
 
-import com.innowise.airline.dto.request.FlightRequestDto;
-import com.innowise.airline.dto.response.FlightResponseDto;
+import com.innowise.airline.dto.request.FlightRequest;
+import com.innowise.airline.dto.response.FlightDto;
 import com.innowise.airline.mapper.FlightMapper;
 import com.innowise.airline.model.Flight;
 import com.innowise.airline.service.FlightService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
-//TODO: Замечания, указанные в других контроллерах учесть при рефакторинге данного.
-
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/flight")
 public class FlightController {
 
     private final FlightService flightService;
+    private final FlightMapper flightMapper;
 
     @PostMapping
-    public ResponseEntity<FlightResponseDto> create(@RequestBody @Valid FlightRequestDto flightRequestDto) {
-        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
-        return new ResponseEntity<>(FlightMapper.mapFlightToFlightResponseDto(flightService.create(flight)), HttpStatus.OK);
+    public ResponseEntity<FlightDto> create(@RequestBody @Valid FlightRequest flightRequest) {
+        Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
+        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.create(flight).orElseThrow()), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<FlightResponseDto>> getAll() {
-        return new ResponseEntity<>(flightService.getAll()
-                .stream()
-                .map(FlightMapper::mapFlightToFlightResponseDto)
-                .collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<Page<FlightDto>> getAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(flightMapper.mapPageFlightToPageFlightDto(flightService.getAll(pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FlightResponseDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(FlightMapper.mapFlightToFlightResponseDto(flightService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<FlightDto> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.getById(id).orElseThrow()), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<FlightResponseDto> update(@Valid @RequestBody FlightRequestDto flightRequestDto, @PathVariable Long id) {
-        Flight flight = FlightMapper.mapFlightRequestDtoToFlight(flightRequestDto);
-        return new ResponseEntity<>(FlightMapper.mapFlightToFlightResponseDto(flightService.updateById(flight, id)), HttpStatus.OK);
+    @PatchMapping("/{id}")
+    public ResponseEntity<FlightDto> update(@Valid @RequestBody FlightRequest flightRequest, @PathVariable Long id) {
+        Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
+        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.updateById(flight, id).orElseThrow()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-        return new ResponseEntity<>(flightService.deleteById(id), HttpStatus.OK);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        flightService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

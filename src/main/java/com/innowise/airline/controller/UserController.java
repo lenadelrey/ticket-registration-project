@@ -1,58 +1,48 @@
 package com.innowise.airline.controller;
 
-import com.innowise.airline.dto.request.UserRequestDto;
-import com.innowise.airline.dto.response.UserResponseDto;
+import com.innowise.airline.dto.request.UserRequest;
+import com.innowise.airline.dto.response.UserDto;
 import com.innowise.airline.mapper.UserMapper;
 import com.innowise.airline.model.User;
 import com.innowise.airline.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<UserResponseDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(UserMapper.mapUserToUserResponseDto(userService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<UserDto> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.getById(id).orElseThrow()), HttpStatus.OK);
     }
 
-    //TODO: Пример ситуации, в которой фронту понадобится получить пользователя по email, если есть id?
-    //TODO: На уровне сервисов такой метод имеет место быть, на уровне контроллера не вижу необходимости
-    @GetMapping("/getByEmail/{email}")
-    public ResponseEntity<UserResponseDto> getByEmail(@PathVariable String email) {
-        return new ResponseEntity<>(UserMapper.mapUserToUserResponseDto(userService.getByEmail(email)), HttpStatus.OK);
-    }
-
-
-    //TODO: Сделать метод в маппере для списка. Тем самым декомпозировать. Нарушение принципа Single Responsibility.
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAll() {
-        return new ResponseEntity<>(userService.getAll()
-                .stream()
-                .map(UserMapper::mapUserToUserResponseDto)
-                .collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<Page<UserDto>> getAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(userMapper.mapPageUserToPageUserDto(userService.getAll(pageable)), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserResponseDto> update(@Valid @RequestBody UserRequestDto userRequestDto, @PathVariable Long id) {
-        User user = UserMapper.mapUserRequestDtoToUser(userRequestDto);
-        return new ResponseEntity<>(UserMapper.mapUserToUserResponseDto(userService.updateById(user, id)), HttpStatus.OK);
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<UserDto> update(@Valid @RequestBody UserRequest userRequest, @PathVariable Long id) {
+        User user = userMapper.mapUserRequestToUser(userRequest);
+        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.updateById(user, id).orElseThrow()), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.deleteById(id), HttpStatus.OK);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        userService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
