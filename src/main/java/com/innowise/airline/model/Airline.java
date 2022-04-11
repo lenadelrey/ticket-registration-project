@@ -1,17 +1,15 @@
 package com.innowise.airline.model;
 
-import com.sun.xml.bind.v2.TODO;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @Table(name = "airline")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,10 +22,5 @@ public class Airline {
     private String name;
 
     //TODO: Необходимость двусторонней связи?
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "from")
-    private Set<Flight> flightsFrom;
-
-    //TODO: Необходимость двусторонней связи?
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "to")
-    private Set<Flight> flightsTo;
+    //да может она и не нужна, все равно все в бд хранится, при необходимости достать оттуда не составит особого труда
 }
