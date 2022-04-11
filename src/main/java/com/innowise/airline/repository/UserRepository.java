@@ -1,18 +1,17 @@
 package com.innowise.airline.repository;
 
 import com.innowise.airline.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    boolean existsByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    //TODO: use Optional
-    User findByEmail(String email);
-
-    List<User> findUsersByDeletedFalse();
+    Page<User> findUsersByDeletedFalse(Pageable pageable);
 }
