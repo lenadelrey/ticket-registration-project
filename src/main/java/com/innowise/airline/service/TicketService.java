@@ -1,23 +1,68 @@
 package com.innowise.airline.service;
 
-import com.innowise.airline.dto.request.TicketRequestDto;
-import com.innowise.airline.dto.response.TicketResponseDto;
+import com.innowise.airline.exception.IsNotExistException;
+import com.innowise.airline.model.Flight;
 import com.innowise.airline.model.Ticket;
+import com.innowise.airline.model.User;
+import com.innowise.airline.repository.FlightRepository;
+import com.innowise.airline.repository.TicketRepository;
+import com.innowise.airline.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
-//TODO: не рекомендуется к использованию интерфейсная модель сервисов в контексте данного api
-public interface TicketService {
+@Service
+@RequiredArgsConstructor
+public class TicketService {
 
-    Ticket create(Ticket ticket, String email);
+    private final TicketRepository ticketRepository;
+    private final FlightRepository flightRepository;
+    private final UserRepository userRepository;
 
-    //TODO: Возвращать Optional
-    Ticket getById(Long id);
+    @Transactional
+    public Optional<Ticket> create(Ticket ticket, Long id) {
+        Flight flight = flightRepository.getById(ticket.getFlightId());
 
-    List<Ticket> getAll();
+        if (flight.getCountOfTickets() == 0) {
+            return Optional.empty();
+        }
 
-    Ticket updateById(Ticket ticket, Long id);
+        flight.setCountOfTickets(flight.getCountOfTickets() - 1);
+        Flight saved = flightRepository.save(flight);
+        ticket.setFlight(saved);
 
-    boolean deleteById(Long id);
+        User user = userRepository.getById(id);
+        ticket.setUserId(user.getId());
+        ticket.setUser(user);
 
+        return Optional.of(ticketRepository.save(ticket));
+    }
+
+    public Optional<Ticket> getById(Long id) {
+        return Optional.ofNullable(ticketRepository.findById(id).orElseThrow(IsNotExistException::new));
+
+    }
+
+    public Page<Ticket> getAll(Pageable pageable) {
+        return ticketRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public Optional<Ticket> updateById(Ticket ticket, Long id) {
+        if (!ticketRepository.existsById(id)) {
+            throw new IsNotExistException();
+        }
+
+        ticket.setId(id);
+        return Optional.of(ticketRepository.save(ticket));
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        ticketRepository.findById(id).ifPresent(ticketRepository::delete);
+    }
 }
