@@ -1,14 +1,12 @@
 package com.innowise.airline.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Setter
+@Getter
 @Builder
 @Table(name = "ticket")
 @NoArgsConstructor
@@ -18,7 +16,9 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "user_id")
     private Long userId;
+    @Column(name = "flight_id")
     private Long flightId;
 
     @ManyToOne
