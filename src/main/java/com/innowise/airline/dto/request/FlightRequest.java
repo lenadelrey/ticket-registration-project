@@ -1,7 +1,7 @@
 package com.innowise.airline.dto.request;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
 public class FlightRequest {
 
     @NotBlank
@@ -23,6 +23,7 @@ public class FlightRequest {
     private Long toId;
 
     @FutureOrPresent(message = "Flight date could be in the future")
+    //@JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime flightDate;
 
     @NotBlank
