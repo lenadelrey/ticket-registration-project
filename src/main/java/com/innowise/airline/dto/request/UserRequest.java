@@ -1,6 +1,6 @@
 package com.innowise.airline.dto.request;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
 public class UserRequest {
 
     @NotBlank(message = "Необходимо указать имя")
@@ -27,7 +27,7 @@ public class UserRequest {
     private String email;
 
     @NotBlank
-    @Size(min = 8, max = 16)
+    @Size(min = 8, max = 16, message = "password must be between 8 and 16 size")
     private String password;
 
     @Past(message = "Дата рождения не должна быть больше текущей")

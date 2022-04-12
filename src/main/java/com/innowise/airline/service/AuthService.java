@@ -7,6 +7,7 @@ import com.innowise.airline.model.User;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.message.AuthException;
@@ -18,14 +19,15 @@ public class AuthService {
     private final UserService userService;
     //private final Map<String, String> refreshStorage = new HashMap<>();
     private final JwtProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @SneakyThrows
     public AuthDto login(@NonNull AuthRequest authRequest) {
         User user = userService.getByEmail(authRequest.getEmail());
-        if (user.getPassword().equals(authRequest.getPassword())) {
+        if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             String accessToken = jwtProvider.generateAccessToken(user);
             String refreshToken = jwtProvider.generateRefreshToken(user);
-          //  refreshStorage.put(user.getEmail(), refreshToken);
+            //  refreshStorage.put(user.getEmail(), refreshToken);
             return new AuthDto(accessToken, refreshToken);
         } else {
             throw new AuthException("Неправильный пароль");

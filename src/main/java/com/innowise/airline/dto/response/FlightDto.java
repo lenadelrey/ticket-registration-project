@@ -3,15 +3,15 @@ package com.innowise.airline.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Builder
 public class FlightDto {
 
-    private AirlineDto from;
-    private AirlineDto to;
-    private LocalDateTime flightDate;
+    private Long fromId;
+    private Long toId;
+    private ZonedDateTime flightDate;
     private int countOfTickets;
 
 }

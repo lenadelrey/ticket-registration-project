@@ -22,6 +22,7 @@ public class FlightService {
     public Flight create(Flight flight) {
         Airline from = airlineRepository.getById(flight.getFromId());
         Airline to = airlineRepository.getById(flight.getToId());
+
         flight.setFrom(from);
         flight.setTo(to);
         return flightRepository.save(flight);
