@@ -23,6 +23,7 @@ public class AuthService {
 
     @SneakyThrows
     public AuthDto login(@NonNull AuthRequest authRequest) {
+//        TODO: не стесняйся разграничивать блоки кода пустыми строками, где необходимо. Хотя бы отдели if
         User user = userService.getByEmail(authRequest.getEmail());
         if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             String accessToken = jwtProvider.generateAccessToken(user);

@@ -7,6 +7,8 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
+//TODO: лишние пустые строки
+//TODO: зачем всегда отдавать хеш пароля? это небезопасно. Почему не используется id в дто?
 public class UserDto {
 
     private String name;

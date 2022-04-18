@@ -7,6 +7,7 @@ import java.time.ZonedDateTime;
 
 @Getter
 @Builder
+//TODO: лишние пустые строки
 public class FlightDto {
 
     private Long fromId;

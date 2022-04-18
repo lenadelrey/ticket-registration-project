@@ -22,6 +22,7 @@ public class FlightRequest {
     @Positive
     private Long toId;
 
+//    TODO: никаких LocalDateTime в дто и реквестах
     @FutureOrPresent(message = "Flight date could be in the future")
     //@JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime flightDate;

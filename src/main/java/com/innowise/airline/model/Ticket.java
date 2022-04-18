@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ticket {
-
+//TODO: пустые строки между полями?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,6 +27,6 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "fk_flight_id", nullable = false)
-    private Flight flight;
+    private Flight flight;//TODO: зачем пустая строчка перед закрытием класса?
 
 }

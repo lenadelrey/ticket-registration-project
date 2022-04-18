@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AirlineRepository extends JpaRepository<Airline, Long> {
 
+//    TODO: зачем override? Зачем вообще явно указывать этот метод, он есть
+//     в PagingAndSortingRepository, предке JpaRepository(актуально здесь и далее)
     @Override
     Page<Airline> findAll(Pageable pageable);
 }

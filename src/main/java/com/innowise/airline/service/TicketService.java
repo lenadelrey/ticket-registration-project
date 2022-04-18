@@ -26,6 +26,7 @@ public class TicketService {
         Flight flight = flightRepository.getById(ticket.getFlightId());
 
         if (flight.getCountOfTickets() == 0) {
+//            TODO: почему не эксепшн?
             return null;
         }
 
@@ -34,6 +35,8 @@ public class TicketService {
         ticket.setFlight(saved);
 
         User user = userRepository.getById(id);
+//      TODO:  Что это это за дичь? рекомендую переопределить setUser так, чтобыон сетал и юзера, и id.
+//       К тому же, два сеттера для одного поля в базе - моветон. Относится ко всем подобным кейсам
         ticket.setUserId(user.getId());
         ticket.setUser(user);
 
@@ -52,7 +55,7 @@ public class TicketService {
     @Transactional
     public Ticket updateById(Ticket ticket, Long id) {
         ticketRepository.findById(id).orElseThrow(IsNotExistException::new);
-
+//TODO: EM нервно курит. Ты это запускала?) Даня, удели внимание логике работы EM и TM
         ticket.setId(id);
         return ticketRepository.save(ticket);
     }

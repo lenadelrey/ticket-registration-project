@@ -26,6 +26,8 @@ public class Flight {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_airline_from_id", nullable = false)
+//    TODO: название переменной не дает полного описания того, что в ней хранится. Почему бы не departureAirport
+//     или хотя бы не airportFrom?
     private Airline from;
 
     @ManyToOne(fetch = FetchType.LAZY)

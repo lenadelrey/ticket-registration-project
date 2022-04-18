@@ -28,6 +28,7 @@ public class AirlineController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<AirlineDto> create(@Valid @RequestBody AirlineRequest airlineRequest) {
+//        TODO: пустая строка перед return
         Airline airline = airlineMapper.mapAirlineRequestToAirline(airlineRequest);
         return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.create(airline)), HttpStatus.OK);
     }

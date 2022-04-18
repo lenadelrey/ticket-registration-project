@@ -15,6 +15,7 @@ public class TicketRequest {
     @Positive
     private Long flightId;
 
+//    TODO: почему id не мб отрицательным?
     @NotBlank
     @Positive
     private Long userId;

@@ -29,6 +29,7 @@ public class AirlineService {
     }
 
     @Transactional
+//    TODO: почему именно updateById, а не просто update?
     public Airline updateById(Airline airline, Long id) {
         airlineRepository.findById(id).orElseThrow(IsNotExistException::new);
 

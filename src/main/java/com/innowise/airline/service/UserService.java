@@ -26,10 +26,12 @@ public class UserService {
     }
 
     public User getById(Long id) {
+//        TODO: одна строчка - одна точка. Актуально везде при использовании Stream/Optional API
         return userRepository.findById(id).orElseThrow(() -> new IsNotExistException("getById"));
     }
 
     public User getByEmail(String email) {
+//        TODO: литералы - в константы. к слову, updateById имеет неактуальный литерал в ошибке
         return userRepository.findByEmail(email).orElseThrow(() -> new IsNotExistException("getByEmail"));
     }
 
@@ -40,7 +42,7 @@ public class UserService {
     @Transactional
     public User updateById(User user, Long id) {
         userRepository.findById(id).orElseThrow(() -> new IsNotExistException("update"));
-
+//TODO: рекомендую return отделять от остального кода метода пустой строкой
         user.setId(id);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);

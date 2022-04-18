@@ -9,10 +9,11 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Builder
+//TODO: про множественные названия уже говорил
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User {//TODO: лишние пустые строки перед первым полем и после последнего. Между полями - всегда пустая строка, если класс - энтити
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

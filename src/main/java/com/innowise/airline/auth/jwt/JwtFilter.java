@@ -27,6 +27,7 @@ public class JwtFilter extends GenericFilterBean {
     private final CustomUserDetailsService userDetailsService;
 
     @Override
+//     TODO: нечитабельный код
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         final String token = getTokenFromRequest((HttpServletRequest) request);

@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/reg")
 public class RegistrationController {
-
+//TODO: Registration - не принятый нэйминг для эндпоинта регистрации. Не вижу смысла декомпозировать auth на два эндпоинта
     private final UserService userService;
     private final UserMapper userMapper;
 

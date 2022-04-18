@@ -15,9 +15,10 @@ public class JwtProvider {
 
     private static final String ACCESS_TOKEN = "accesstoken";
     private static final String REFRESH_TOKEN = "refreshtoken";
-
+//TODO: нечитабельный код
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
+//        Экспайред в 10 мин? Зачем там мало?
         final Instant accessExpirationInstant = now.plusMinutes(10).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
