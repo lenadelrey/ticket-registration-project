@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtFilter jwtFilter;
 
@@ -38,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").authenticated()
-                .antMatchers("/login", "/reg").permitAll()
+                .antMatchers("/auth", "/sendSimpleEmail").permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }

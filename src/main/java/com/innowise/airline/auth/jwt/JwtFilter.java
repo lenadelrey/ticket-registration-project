@@ -20,34 +20,34 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
-
     private static final String AUTHORIZATION = "Authorization";
-
     private final JwtProvider jwtProvider;
     private final CustomUserDetailsService userDetailsService;
 
     @Override
-//     TODO: нечитабельный код
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         final String token = getTokenFromRequest((HttpServletRequest) request);
+
         if (token != null && jwtProvider.validateAccessToken(token)) {
             Claims claims = jwtProvider.getAccessClaims(token);
             String username = claims.getSubject();
             CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
+
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
+
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         chain.doFilter(request, response);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
-        final String bearer = request.getHeader(AUTHORIZATION);
-        if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) {
-            return bearer.substring(7);
+        final String header = request.getHeader(AUTHORIZATION);
+
+        if (StringUtils.hasText(header)) {
+            return header;
         }
         return null;
     }
-
 }

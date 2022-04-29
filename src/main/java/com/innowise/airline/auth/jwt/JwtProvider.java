@@ -12,15 +12,15 @@ import java.util.Date;
 
 @Component
 public class JwtProvider {
-
     private static final String ACCESS_TOKEN = "accesstoken";
     private static final String REFRESH_TOKEN = "refreshtoken";
-//TODO: нечитабельный код
+
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
-//        Экспайред в 10 мин? Зачем там мало?
-        final Instant accessExpirationInstant = now.plusMinutes(10).atZone(ZoneId.systemDefault()).toInstant();
+
+        final Instant accessExpirationInstant = now.plusMinutes(60).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
+
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .setExpiration(accessExpiration)
@@ -32,8 +32,10 @@ public class JwtProvider {
 
     public String generateRefreshToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
+
         final Instant refreshExpirationInstant = now.plusDays(30).atZone(ZoneId.systemDefault()).toInstant();
         final Date refreshExpiration = Date.from(refreshExpirationInstant);
+
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .setExpiration(refreshExpiration)
@@ -73,5 +75,4 @@ public class JwtProvider {
     private Claims getClaims(@NonNull String token, @NonNull String secret) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
-
 }

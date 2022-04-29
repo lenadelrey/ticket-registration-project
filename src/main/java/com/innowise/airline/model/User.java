@@ -9,21 +9,21 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Builder
-//TODO: про множественные названия уже говорил
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {//TODO: лишние пустые строки перед первым полем и после последнего. Между полями - всегда пустая строка, если класс - энтити
-
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String email;
+
     private String password;
 
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    private LocalDate birthDate;
 
     @Column(name = "role_name")
     @Enumerated(EnumType.STRING)
@@ -32,7 +32,6 @@ public class User {//TODO: лишние пустые строки перед п�
     @Column
     @Builder.Default
     private boolean deleted = false;
-
 }
 
 

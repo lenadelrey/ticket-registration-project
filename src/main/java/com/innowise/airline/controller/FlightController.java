@@ -20,7 +20,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/user/flight")
 public class FlightController {
-
     private final FlightService flightService;
     private final FlightMapper flightMapper;
 
@@ -28,6 +27,7 @@ public class FlightController {
     @PostMapping
     public ResponseEntity<FlightDto> create(@RequestBody @Valid FlightRequest flightRequest) {
         Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
+
         return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.create(flight)), HttpStatus.OK);
     }
 
@@ -45,14 +45,15 @@ public class FlightController {
     @PatchMapping("/{id}")
     public ResponseEntity<FlightDto> update(@Valid @RequestBody FlightRequest flightRequest, @PathVariable Long id) {
         Flight flight = flightMapper.mapFlightRequestToFlight(flightRequest);
-        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.updateById(flight, id)), HttpStatus.OK);
+
+        return new ResponseEntity<>(flightMapper.mapFlightToFlightDto(flightService.update(flight, id)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         flightService.deleteById(id);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

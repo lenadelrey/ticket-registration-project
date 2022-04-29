@@ -8,12 +8,10 @@ import java.time.LocalDateTime;
 @Entity
 @Setter
 @Getter
-@Table(name = "flight")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Flight {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,18 +24,15 @@ public class Flight {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_airline_from_id", nullable = false)
-//    TODO: название переменной не дает полного описания того, что в ней хранится. Почему бы не departureAirport
-//     или хотя бы не airportFrom?
-    private Airline from;
+    private Airline airlineFrom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_airline_to_id", nullable = false)
-    private Airline to;
+    private Airline airlineTo;
 
     @Column(name = "flight_date")
     private LocalDateTime flightDate;
 
     @Column(name = "count_of_tickets")
     private int countOfTickets;
-
 }

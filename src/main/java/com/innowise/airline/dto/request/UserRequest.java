@@ -1,8 +1,6 @@
 package com.innowise.airline.dto.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,10 +14,7 @@ import java.time.LocalDate;
 // с разными именами не имеет смысла, это касается всех моих entity
 
 @Getter
-@Setter
-@AllArgsConstructor
 public class UserRequest {
-
     @NotBlank(message = "Необходимо указать имя")
     private String name;
 

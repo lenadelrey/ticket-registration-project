@@ -20,13 +20,13 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/user/ticket")
 public class TicketController {
-
     private final TicketService ticketService;
     private final TicketMapper ticketMapper;
 
     @PostMapping("/{id}")
     public ResponseEntity<TicketDto> createTicket(@RequestBody @Valid TicketRequest ticketRequest, @PathVariable Long id) {
         Ticket ticket = ticketMapper.mapTicketRequestToTicket(ticketRequest);
+
         return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.create(ticket, id)), HttpStatus.OK);
     }
 
@@ -44,12 +44,14 @@ public class TicketController {
     @PatchMapping("/{id}")
     public ResponseEntity<TicketDto> update(@RequestBody @Valid TicketRequest ticketRequest, @PathVariable Long id) {
         Ticket ticket = ticketMapper.mapTicketRequestToTicket(ticketRequest);
-        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.updateById(ticket, id)), HttpStatus.OK);
+
+        return new ResponseEntity<>(ticketMapper.mapTicketToTicketDto(ticketService.update(ticket, id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ticketService.deleteById(id);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

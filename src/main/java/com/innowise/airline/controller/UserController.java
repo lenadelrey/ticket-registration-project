@@ -19,7 +19,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-
     private final UserService userService;
     private final UserMapper userMapper;
 
@@ -30,19 +29,20 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Page<UserDto>> getAll(@PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(userMapper.mapPageUserToPageUserDto(userService.getAll(pageable)), HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.mapPageUserToPageUserDto(userService.getAll(false, pageable)), HttpStatus.OK);
     }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<UserDto> update(@Valid @RequestBody UserRequest userRequest, @PathVariable Long id) {
         User user = userMapper.mapUserRequestToUser(userRequest);
-        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.updateById(user, id)), HttpStatus.OK);
+
+        return new ResponseEntity<>(userMapper.mapUserToUserDto(userService.update(user, id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteById(id);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

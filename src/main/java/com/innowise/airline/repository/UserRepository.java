@@ -10,10 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
     Optional<User> findByEmail(String email);
 
-//    TODO: почему бы не Deleted и переменная? Ты явно ограничиваешь себе пронстранство для маневра.
-//     Что будешь делать, если потребуется только удаленных пользователей достать? Или вообще всех?
-    Page<User> findUsersByDeletedFalse(Pageable pageable);
+    Page<User> findUsersByDeleted(boolean deleted, Pageable pageable);
 }

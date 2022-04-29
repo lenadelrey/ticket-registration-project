@@ -21,15 +21,14 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/user/airline")
 public class AirlineController {
-
     private final AirlineService airlineService;
     private final AirlineMapper airlineMapper;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<AirlineDto> create(@Valid @RequestBody AirlineRequest airlineRequest) {
-//        TODO: пустая строка перед return
         Airline airline = airlineMapper.mapAirlineRequestToAirline(airlineRequest);
+
         return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.create(airline)), HttpStatus.OK);
     }
 
@@ -47,14 +46,15 @@ public class AirlineController {
     @PatchMapping("/{id}")
     public ResponseEntity<AirlineDto> update(@Valid @RequestBody AirlineRequest airlineRequest, @PathVariable Long id) {
         Airline airline = airlineMapper.mapAirlineRequestToAirline(airlineRequest);
-        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.updateById(airline, id)), HttpStatus.OK);
+
+        return new ResponseEntity<>(airlineMapper.mapAirlineToAirlineDto(airlineService.update(airline, id)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         airlineService.deleteById(id);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

@@ -3,16 +3,14 @@ package com.innowise.airline.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
-//TODO: лишние пустые строки
 public class FlightDto {
-
     private Long fromId;
     private Long toId;
-    private ZonedDateTime flightDate;
+    //private ZonedDateTime flightDate;
+    private LocalDateTime flightDate;
     private int countOfTickets;
-
 }
